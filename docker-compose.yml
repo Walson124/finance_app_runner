@@ -1,0 +1,53 @@
+services:
+    frontend:
+        build:
+            context: ./finance_tracking # Path to your frontend project
+            dockerfile: Dockerfile # Dockerfile to build the frontend
+            target: ${BUILD_TARGET:-production} # Specify the build target (dev or production)
+        ports:
+            - "3000:3000" # Expose port 3000 on the host to port 3000 on the container
+        environment:
+            - NODE_ENV=${NODE_ENV:-production} # Set environment (development or production)
+        command: ${APP_COMMAND:-npm start} # Use npm start or custom app command (default is npm start)
+        networks:
+            - finance_network
+        # depends_on:
+        #     - flask-backend # Ensure the backend is started before the frontend
+
+    flask-backend:
+        build:
+            context: ./finance_tracking_api # Path to your Flask backend directory
+            dockerfile: Dockerfile # Dockerfile for the backend
+        ports:
+            - "5000:5000" # Expose backend port 5000
+        networks:
+            - finance_network
+        environment:
+            - FLASK_ENV=${FLASK_ENV:-production} # Set Flask environment (development or production)
+            - FLASK_APP=main.py # Point to your main Flask app
+        env_file:
+            - ./finance_tracking_api/.env
+        depends_on:
+            - postgres
+        volumes:
+            - "/media/walson/WALSON 15GB/music:/media/walson/music:rw"
+
+    postgres:
+        image: postgres:latest # Use the latest PostgreSQL image
+        environment:
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+        ports:
+            - "5555:5432"
+        networks:
+            - finance_network
+
+networks:
+    finance_network:
+        driver: bridge
+
+volumes:
+    pgdata:

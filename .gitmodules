@@ -1,0 +1,6 @@
+[submodule "finance_tracking"]
+	path = finance_tracking
+	url = https://github.com/Walson124/finance_tracking.git
+[submodule "finance_tracking_api"]
+	path = finance_tracking_api
+	url = https://github.com/Walson124/finance_tracking_api.git
