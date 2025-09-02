@@ -101,6 +101,15 @@ sudo systemctl restart avahi-daemon
 
 ---
 
+## Database
+
+- Program using docker postgres instance
+
+Run backup in ../finance_app_db_backup folder using this command:
+sudo docker exec -t finance_app-postgres-1 pg_dumpall -U postgres > backup_YYYY-MM-DD.sql
+
+---
+
 ## Docker Cleanup
 
 Free up system storage with these commands:
